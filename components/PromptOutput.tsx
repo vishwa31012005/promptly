@@ -39,7 +39,7 @@ const PromptOutput: React.FC<PromptOutputProps> = ({ prompt, isLoading, error })
     if (prompt) {
       return (
         <div className="relative w-full">
-          <pre className="text-gray-700 dark:text-gray-200 whitespace-pre-wrap bg-gray-100 dark:bg-gray-700/50 p-4 rounded-md text-sm leading-relaxed pr-12">
+          <pre className="text-gray-700 dark:text-gray-200 whitespace-pre-wrap bg-gray-100 dark:bg-slate-700/30 p-4 rounded-md text-sm leading-relaxed pr-12">
             {prompt}
           </pre>
           <button
@@ -61,8 +61,8 @@ const PromptOutput: React.FC<PromptOutputProps> = ({ prompt, isLoading, error })
 
   return (
     <div className="mt-8">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Generated Prompt</h2>
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 min-h-[120px] flex items-center justify-center">
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-blue-400 dark:to-purple-500 mb-4">Generated Prompt</h2>
+      <div className="bg-white dark:bg-slate-800/30 dark:backdrop-blur-md p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 min-h-[120px] flex items-center justify-center">
         {renderContent()}
       </div>
     </div>

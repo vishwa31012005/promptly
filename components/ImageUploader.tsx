@@ -66,14 +66,14 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect, onFileClear
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-slate-800/30 dark:backdrop-blur-md p-4 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
        <label
         htmlFor="file-upload"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
-        className={`relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer transition-colors duration-200 ${isDragging ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+        className={`relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer transition-colors duration-200 ${isDragging ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10' : 'bg-gray-50 dark:bg-slate-700/20 hover:bg-gray-100 dark:hover:bg-slate-700/40'}`}
       >
         {preview ? (
           <>
