@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { UploadIcon } from './Icons';
+import { UploadIcon, TrashIcon } from './Icons';
 
 interface ImageUploaderProps {
   onFileSelect: (file: File) => void;
+  onFileClear: () => void;
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect, onFileClear }) => {
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -53,6 +54,17 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect }) => {
     setIsDragging(false);
   };
 
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setPreview(null);
+    onFileClear();
+    // Reset the file input so the same file can be selected again
+    const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+    if (fileInput) {
+        fileInput.value = '';
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
        <label
@@ -64,7 +76,16 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileSelect }) => {
         className={`relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer transition-colors duration-200 ${isDragging ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
       >
         {preview ? (
-          <img src={preview} alt="Image preview" className="object-contain h-full w-full rounded-lg" />
+          <>
+            <img src={preview} alt="Image preview" className="object-contain h-full w-full rounded-lg" />
+            <button
+                onClick={handleClear}
+                className="absolute top-2 right-2 p-2 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75 transition-opacity"
+                aria-label="Remove image"
+            >
+                <TrashIcon className="w-5 h-5" />
+            </button>
+          </>
         ) : (
           <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center">
             <UploadIcon className="w-10 h-10 mb-3 text-gray-400 dark:text-gray-500" />

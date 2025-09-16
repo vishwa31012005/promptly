@@ -31,27 +31,55 @@ const fileToGenerativePart = (file: File): Promise<{ inlineData: { data: string;
   });
 };
 
-export const generatePromptFromImage = async (imageFile: File, additionalDescription: string): Promise<string> => {
+export const generatePromptFromImage = async (imageFile: File | null, additionalDescription: string): Promise<string> => {
   try {
-    const imagePart = await fileToGenerativePart(imageFile);
-    
-    const systemPrompt = `You are an expert in creating detailed and effective prompts for AI image generation models. 
-Based on the uploaded image (which could be a screenshot, wireframe, or UI design) and any additional text, generate a frontend layout suggestion or a descriptive prompt.
-The output should be a clear, concise, and descriptive text prompt that an AI could use to generate a similar or improved version of the UI.
-Focus on structure, color palette, typography, and key UI components shown in the image. Be specific.`;
+    const systemPrompt = `You are a world-class prompt engineer with 30+ years of expertise in multimodal AI (text + image).
 
-    const userPrompt = `
-Here is a UI design I'm working on. 
-${additionalDescription ? `Additional context: ${additionalDescription}`: 'Please analyze the image and suggest a descriptive prompt.'}
-    `;
+Your Task:
+
+Analyze the user’s input text from the Additional Description box.
+
+If an image is uploaded:
+
+Extract and describe the image in detail.
+
+Combine the auto-generated image description with the user’s text.
+
+Create the best possible final prompt, fully optimized for image generation tools (Gemini, GPT, DALL-E, Stable Diffusion).
+
+If no image is uploaded:
+
+Use only the user’s input text.
+
+Transform it into a high-quality final prompt, which could be:
+
+an image generation prompt,
+
+a text generation scenario,
+
+or an instruction prompt — whichever is most suitable for the content.
+
+Prompt Engineering Framework:
+
+Use Role + Task + Context + Constraints + Output Style for maximum clarity.
+
+Add missing context if needed (creativity, realism, lighting, tone, style).
+
+Ensure the final result is clear, actionable, structured, and immediately usable in Gemini, GPT, Claude, or DeepSeek.
+
+Output should be clean, copy-paste ready, and designed to maximize AI performance.`;
+
+    const parts: any[] = [{ text: additionalDescription || 'No additional instructions provided.' }];
+
+    if (imageFile) {
+      const imagePart = await fileToGenerativePart(imageFile);
+      parts.push(imagePart);
+    }
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: { 
-        parts: [
-          { text: userPrompt },
-          imagePart
-        ]
+        parts: parts
       },
       config: {
         systemInstruction: systemPrompt,

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { CopyIcon, CheckIcon } from './Icons';
 
 interface PromptOutputProps {
   prompt: string;
@@ -7,6 +8,18 @@ interface PromptOutputProps {
 }
 
 const PromptOutput: React.FC<PromptOutputProps> = ({ prompt, isLoading, error }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (!prompt) return;
+    navigator.clipboard.writeText(prompt).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
+  };
+
   const LoadingSpinner = () => (
     <div className="flex items-center justify-center space-x-2">
       <div className="w-4 h-4 rounded-full animate-pulse bg-blue-500"></div>
@@ -25,9 +38,18 @@ const PromptOutput: React.FC<PromptOutputProps> = ({ prompt, isLoading, error })
     }
     if (prompt) {
       return (
-        <pre className="text-gray-700 dark:text-gray-200 whitespace-pre-wrap bg-gray-100 dark:bg-gray-700/50 p-4 rounded-md text-sm leading-relaxed">
-          {prompt}
-        </pre>
+        <div className="relative w-full">
+          <pre className="text-gray-700 dark:text-gray-200 whitespace-pre-wrap bg-gray-100 dark:bg-gray-700/50 p-4 rounded-md text-sm leading-relaxed pr-12">
+            {prompt}
+          </pre>
+          <button
+            onClick={handleCopy}
+            className="absolute top-3 right-3 p-2 rounded-md text-gray-600 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800"
+            aria-label="Copy prompt to clipboard"
+          >
+            {copied ? <CheckIcon className="w-5 h-5 text-green-500" /> : <CopyIcon className="w-5 h-5" />}
+          </button>
+        </div>
       );
     }
     return (

@@ -41,8 +41,8 @@ const App: React.FC = () => {
   };
 
   const handleGenerate = async () => {
-    if (!imageFile) {
-      setError('Please upload an image first.');
+    if (!imageFile && !additionalDescription.trim()) {
+      setError('Please upload an image or add a description.');
       return;
     }
 
@@ -78,7 +78,7 @@ const App: React.FC = () => {
               <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Generate Prompts</h1>
             </header>
             <div className="space-y-6">
-              <ImageUploader onFileSelect={setImageFile} />
+              <ImageUploader onFileSelect={setImageFile} onFileClear={() => setImageFile(null)} />
 
               <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
                  <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -96,7 +96,7 @@ const App: React.FC = () => {
               <div className="flex justify-end">
                 <button
                   onClick={handleGenerate}
-                  disabled={isLoading || !imageFile}
+                  disabled={isLoading || (!imageFile && !additionalDescription.trim())}
                   className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition duration-200 ease-in-out"
                 >
                   {isLoading ? 'Generating...' : 'Generate Prompt'}
